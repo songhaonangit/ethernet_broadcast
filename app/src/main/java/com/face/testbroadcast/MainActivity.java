@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     String netMask;
     String dns1;
     String dns2;
-    Button bt_static, bt_dhcp, bt_open, bt_close;
+    Button bt_static, bt_dhcp, bt_open, bt_close,bt_reset;
     IntentFilter ethernetFilter;
 
     @Override
@@ -75,7 +75,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        bt_reset = findViewById(R.id.bt_reset);
+        bt_reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LANKE_ETHERNET);
+                intent.putExtra("Ethernet_Type", "static");
+                intent.putExtra("ipAdd", "192.168.1.250");
+                intent.putExtra("netMask", "255.255.255.0");
+                intent.putExtra("gw", "192.168.1.1");
+                intent.putExtra("dns1", "101.198.199.200");
+                intent.putExtra("dns2", "211.162.66.66");
+                sendBroadcast(intent);
+            }
+        });
         //songhaonan add start
         ethernetFilter = new IntentFilter();
         ethernetFilter.setPriority(1000);
@@ -104,22 +117,17 @@ public class MainActivity extends AppCompatActivity {
                // Toast.makeText(context, "---getReceiver---"+LANKE_ETHERNET_SYSTEM, Toast.LENGTH_SHORT).show();
                 switch (ethernet_type){
                     case "static":
+                    case "dhcp":
+                    case "open":
                         ipadd = intent.getStringExtra("ipAdd");
                         gw = intent.getStringExtra("gw");
                         netMask = intent.getStringExtra("netMask");
                         dns1 = intent.getStringExtra("dns1");
                         dns2 = intent.getStringExtra("dns2");
-
                         Toast.makeText(context, "---" + ethernet_type + ipadd + gw + netMask + dns1 + dns2 + "---", Toast.LENGTH_LONG).show();
 
                         break;
-                    case "dhcp":
-                        Toast.makeText(context, "---" + ethernet_type + "---", Toast.LENGTH_LONG).show();
-                        break;
                     case "close":
-                        Toast.makeText(context, "---" + ethernet_type + "---", Toast.LENGTH_LONG).show();
-                        break;
-                    case "open":
                         Toast.makeText(context, "---" + ethernet_type + "---", Toast.LENGTH_LONG).show();
                         break;
 
